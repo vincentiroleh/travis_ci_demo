@@ -6,26 +6,28 @@ environment:
 
 jobs:
   build:
+    working_directory: /app
     docker:
       - image: circleci/node:13
     steps:
-    - run:
-        name: Print Docker version
-        command: |
-          echo "Docker version:"
-          docker --version
+      - checkout
+      - run:
+          name: Print Docker version
+          command: |
+            echo "Docker version:"
+            docker --version
 
-    - run:
-        name: Build Docker image
-        command: |
-          docker build -t simple-node .
-          docker tag simple-node-iroleh iroleh/simple-node-iroleh:latest
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t simple-node .
+            docker tag simple-node-iroleh iroleh/simple-node-iroleh:latest
 
-    - run:
-        name: Push Docker image to registry
-        command: |
-          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          docker push iroleh/simple-node-iroleh
+      - run:
+          name: Push Docker image to registry
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker push iroleh/simple-node-iroleh
 
 workflows:
   simple_node_workflow:
